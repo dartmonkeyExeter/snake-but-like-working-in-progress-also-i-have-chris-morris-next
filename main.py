@@ -1,4 +1,4 @@
-import random, time, os
+import random, time, os, keyboard
 
 maze = [["--" for i in range(0, 12)]]
 maze += [[" " for i in range(0, 24)] for j in range(12)]
@@ -73,9 +73,25 @@ def shoot():
                     maze[old_parts[0][0]][old_parts[0][1]] = " "
                     old_parts.pop(0)
             place_apple()
-
+        
         drawMaze()
-        where_to_go = input()
+        
+        start_time = time.time()
+        where_to_go = ""
+        while time.time() - start_time < 0.1:
+            if keyboard.is_pressed('w'):
+                where_to_go = 'w'
+                break
+            elif keyboard.is_pressed('a'):
+                where_to_go = 'a'
+                break
+            elif keyboard.is_pressed('s'):
+                where_to_go = 's'
+                break
+            elif keyboard.is_pressed('d'):
+                where_to_go = 'd'
+                break
+        time.sleep(0.2)
         try:
             next_direction = directions_dict[where_to_go]
             dir_idx = directions_list.index(next_direction)
@@ -85,5 +101,5 @@ def shoot():
                 direction = next_direction
         except KeyError:
             pass
-
+        
 shoot()
