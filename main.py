@@ -51,7 +51,10 @@ def shoot():
         elif direction == "down":
             row = row + 1
 
-        if maze[row][col] == " ":
+        if maze[row][col] == "|" or maze[row][col] == "|" or maze[row][col] == "--" or maze[row][col] == "+":
+            print("snake dead")
+            state = "lost"
+        elif maze[row][col] == " ":
             print("")
             maze[row][col] = "+"
             old_parts.append([row, col])
@@ -59,10 +62,7 @@ def shoot():
             if check != 0:
                 for i in range(check):
                     maze[old_parts[0][0]][old_parts[0][1]] = " "
-                    old_parts.pop(0)
-        elif maze[row][col] == "|" or maze[row][col] == "|" or maze[row][col] == "--" or maze[row][col] == "+":
-            print("snake dead")
-            state = "lost"
+                    old_parts.pop(0)            
         elif maze[row][col] == "*":
             maze[row][col] = "+"
             length += 1
