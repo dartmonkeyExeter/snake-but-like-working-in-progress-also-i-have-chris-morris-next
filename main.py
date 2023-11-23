@@ -3,16 +3,19 @@ import time
 import os
 import keyboard
 
-maze = [["--" for i in range(0, 12)]]
-maze += [[" " for i in range(0, 24)] for j in range(12)]
-maze += [["--" for i in range(0, 12)]]
+def init_maze():
+    maze = [["-" for i in range(0, 24)]]
+    maze += [[" " for i in range(0, 24)] for j in range(12)]
+    maze += [["-" for i in range(0, 24)]]
 
-for jidx, row in enumerate(maze):
-    for idx, cell in enumerate(row):
-        if cell == " " and (idx == 0 or idx == 23):
-            maze[jidx][idx] = "|"
+    for jidx, row in enumerate(maze):
+        for idx, cell in enumerate(row):
+            if cell == " " and (idx == 0 or idx == 23):
+                maze[jidx][idx] = "|"
+    return maze
 
-def place_apple():
+
+def place_apple(maze):
     while True:
         row = random.randint(1, 10)
         col = random.randint(0, 23)
@@ -22,7 +25,7 @@ def place_apple():
         else:
             continue
 
-def drawMaze():
+def drawMaze(maze):
     for i in maze:
         print("".join(i))
 
@@ -34,18 +37,19 @@ directions_dict = {
 }
 directions_list = ["up", "left", "down", "right"]
 
-def shoot():
+def gameloop():    
+    maze = init_maze()
     global direction
-    state = "shooting"
+    state = "gamelooping"
     direction = "right"
     source = (5, 0)
     row = source[0]
     col = source[1]
-    length = 5
+    length = 3
     old_parts = []
-    place_apple()
+    place_apple(maze)
 
-    while state == "shooting":
+    while state == "gamelooping":
         os.system("cls")
         if direction == "right":
             col = col + 1
@@ -59,10 +63,10 @@ def shoot():
         if (
             maze[row][col] == "|"
             or maze[row][col] == "|"
-            or maze[row][col] == "--"
+            or maze[row][col] == "-"
             or maze[row][col] == "+"
         ):
-            print("snake dead")
+            print(f"snake dead\nscore: {length-3}")
             state = "lost"
         elif maze[row][col] == " ":
             print("")
@@ -82,9 +86,9 @@ def shoot():
                 for i in range(check):
                     maze[old_parts[0][0]][old_parts[0][1]] = " "
                     old_parts.pop(0)
-            place_apple()
+            place_apple(maze)
 
-        drawMaze()
+        drawMaze(maze)
 
         start_time = time.time()
         where_to_go = ""
@@ -108,4 +112,8 @@ def shoot():
         except KeyError:
             pass
 
-shoot()
+while True:
+    gameloop()
+    play_again = input("play again? (y/n) ")
+    if play_again == "n":
+        break
