@@ -1,8 +1,12 @@
-import random, time, os, keyboard
+import random
+import time
+import os
+import keyboard
 
 maze = [["--" for i in range(0, 12)]]
 maze += [[" " for i in range(0, 24)] for j in range(12)]
 maze += [["--" for i in range(0, 12)]]
+
 for jidx, row in enumerate(maze):
     for idx, cell in enumerate(row):
         if cell == " " and (idx == 0 or idx == 23):
@@ -40,6 +44,7 @@ def shoot():
     length = 5
     old_parts = []
     place_apple()
+
     while state == "shooting":
         os.system("cls")
         if direction == "right":
@@ -51,7 +56,12 @@ def shoot():
         elif direction == "down":
             row = row + 1
 
-        if maze[row][col] == "|" or maze[row][col] == "|" or maze[row][col] == "--" or maze[row][col] == "+":
+        if (
+            maze[row][col] == "|"
+            or maze[row][col] == "|"
+            or maze[row][col] == "--"
+            or maze[row][col] == "+"
+        ):
             print("snake dead")
             state = "lost"
         elif maze[row][col] == " ":
@@ -62,7 +72,7 @@ def shoot():
             if check != 0:
                 for i in range(check):
                     maze[old_parts[0][0]][old_parts[0][1]] = " "
-                    old_parts.pop(0)            
+                    old_parts.pop(0)
         elif maze[row][col] == "*":
             maze[row][col] = "+"
             length += 1
@@ -73,25 +83,21 @@ def shoot():
                     maze[old_parts[0][0]][old_parts[0][1]] = " "
                     old_parts.pop(0)
             place_apple()
-        
+
         drawMaze()
-        
+
         start_time = time.time()
         where_to_go = ""
-        while time.time() - start_time < 0.1:
+        while time.time() - start_time < 0.2:
             if keyboard.is_pressed('w'):
                 where_to_go = 'w'
-                break
             elif keyboard.is_pressed('a'):
                 where_to_go = 'a'
-                break
             elif keyboard.is_pressed('s'):
                 where_to_go = 's'
-                break
             elif keyboard.is_pressed('d'):
                 where_to_go = 'd'
-                break
-        time.sleep(0.2)
+
         try:
             next_direction = directions_dict[where_to_go]
             dir_idx = directions_list.index(next_direction)
@@ -101,5 +107,5 @@ def shoot():
                 direction = next_direction
         except KeyError:
             pass
-        
+
 shoot()
