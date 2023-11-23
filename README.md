@@ -1,2 +1,2 @@
-# snake-but-not-working-right-now
+# snake
 it works now (its wasd to snake around)
